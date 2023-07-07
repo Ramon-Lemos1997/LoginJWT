@@ -10,8 +10,7 @@ const userController={
       if (error) {
         return res.status(400).send(error.message);
       }
-  
-
+      
         const selectUser= await User.findOne({email:req.body.email})
         if(selectUser) return res.status(400).send('Email já em uso')
         const user= new User({
@@ -22,10 +21,11 @@ const userController={
         try{
             const saveUser= await user.save()
             res.send(saveUser)
-        }catch(err){
-            res.status(400).send(err)
+        }catch(error){
+            res.status(400).send(error)
         }
-    },
+    },  
+                                                                                                              
     login: async function(req, res) {
       const { error } = loginValidate(req.body);
       if (error) {
@@ -43,7 +43,18 @@ const userController={
       
         const token = jwt.sign({_id: selectUser._id, admin: selectUser.admin}, process.env.TOKEN_SECRET);
         res.header('authorization-token', token);
-        res.send('User logged');
+        res.send(token);
+      },
+      
+      logout: async function(req, res) {
+        const selectUser = await User.findOne({ token: req.body._id });
+        if (!selectUser) {
+          return res.status(400).send('Usuário não encontrado');
+        }
+        selectUser.token = null; 
+        await selectUser.save();
+      
+        return res.send('Logout successful');
       }
       
 

@@ -4,6 +4,9 @@ const app = express();
 const userRouter = require('./routes/userRouter');
 const adminRouter= require('./routes/adminRouter')
 const mongoose = require('mongoose');
+const cors= require('cors')
+
+app.use(cors({ origin: '*' }));
 
 async function connectToDatabase() {
   try {
@@ -22,6 +25,16 @@ connectToDatabase();
 app.use('/user', express.json(), userRouter,);
 app.use('/admin', express.json(), adminRouter)
 
-app.listen(process.env.PORT, () => {
-  console.log('Server running');
-});
+async function startServer() {
+  try {
+    await connectToDatabase();
+    app.listen(process.env.PORT, () => {
+      console.log('Server running');
+    });
+  } catch (error) {
+    console.error('Error starting server:', error);
+  }
+}
+
+startServer();
+
