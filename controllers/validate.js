@@ -1,30 +1,20 @@
-const Joi= require('@hapi/joi') //module para vailidação original
+const Joi = require('@hapi/joi');
 
 const registerValidate = (data) => {
-    const schema = Joi.object({
-      name: Joi.string().required().min(3).max(50),
-      email: Joi.string().required().min(3).max(50),
-      password: Joi.string().required().min(6).max(100),
-    });
-  
-    const { error, value } = schema.validate(data);
-  
-    if (error && error.details && error.details.length > 0) {
-      const errorField = error.details[0].path[0];
-  
-      if (errorField === "name") {
-        return {
-          error: {
-            message: "Nome deve conter no mínimo três caracteres",
-            field: errorField,
-          },
-        };
-      }
-    }
-  
-    return { value };
-  };
-  
+  const schema = Joi.object({
+    name: Joi.string().required().min(3).max(50),
+    email: Joi.string().required().min(3).max(50),
+    password: Joi.string().required().min(6).max(100),
+  });
+
+  const validation = schema.validate(data);
+  if (validation.error) {
+    throw new Error(validation.error.details[0].message);
+  }
+
+  return data;
+};
+
 
 const loginValidate= (data)=>{
     const schema= Joi.object({

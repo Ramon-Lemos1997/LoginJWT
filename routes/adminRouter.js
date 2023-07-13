@@ -1,9 +1,9 @@
 const express= require('express')
 const router= express.Router()
 
-const auth= require('../controllers/authController')
+const auth= require('../controllers/userController')
 
-router.get('/', auth, (req,res)=>{
+router.get('/', auth.auth, (req,res)=>{
     if(req.user.admin){
         res.send('Esse dado só deve ser visto pelo admin')
     }else{

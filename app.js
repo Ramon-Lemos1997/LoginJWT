@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const cors= require('cors')
 
 app.use(cors({ origin: '*' }));
-
+app.use(express.json())
 async function connectToDatabase() {
   try {
     await mongoose.connect(process.env.MONGO_CONNECTION_URL, {
@@ -22,8 +22,8 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-app.use('/user', express.json(), userRouter,);
-app.use('/admin', express.json(), adminRouter)
+app.use('/user', userRouter,);
+app.use('/admin', adminRouter)
 
 async function startServer() {
   try {
