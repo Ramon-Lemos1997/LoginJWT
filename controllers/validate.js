@@ -7,12 +7,8 @@ const registerValidate = (data) => {
     password: Joi.string().required().min(6).max(100),
   });
 
-  const validation = schema.validate(data);
-  if (validation.error) {
-    throw new Error(validation.error.details[0].message);
-  }
-
-  return data;
+ 
+  return schema.validate(data);
 };
 
 
